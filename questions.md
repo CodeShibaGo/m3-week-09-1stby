@@ -72,3 +72,61 @@ gunicorn -w 4 -b 127.0.0.1:8000 app:app
 ## 參考資料
 
 https://www.cnblogs.com/zongfa/p/12614459.html#:~:text=flask%E4%B8%ADgunicorn%E7%9A%84%E4%BD%BF%E7%94%A8%201%201%E3%80%81%E6%A8%A1%E5%9D%97%E5%AE%89%E8%A3%85%202%202%E3%80%81%E7%94%A8flask%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84web%E6%9C%8D%E5%8A%A1,3%203%E3%80%81%E5%90%AF%E5%8A%A8%204%204%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%205%205%E3%80%81gunicorn%E5%90%AF%E5%8A%A8flask%E5%90%8E%EF%BC%8C%E8%AE%BF%E9%97%AEapi%E5%8D%B4%E6%8A%A5404
+
+---
+
+## 使用守護進程 systemd 啟動 Gunicorn
+
+1. 創建 systemd 服務文件：在`/etc/systemd/system/`目錄下創建一個以`.service`結尾的文件。
+
+2. 編輯文件內容
+
+   ```shell
+   sudo nano /etc/systemd/system/myproject.service
+   ```
+
+   ```
+   [Unit]
+   Description=Gunicorn Service for myproject
+   After=network.target
+
+   [Service]
+   User=your_username
+   Group=your_group
+   WorkingDirectory=/path/to/myproject
+   ExecStart=/path/to/gunicorn myproject.wsgi:application -c /path/to/gunicorn.conf.py
+   Restart=always
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+- `your_username`：運行 Gunicorn 的用戶名。
+- `your_group`：運行 Gunicorn 的組名。
+- `WorkingDirectory`：指定`myproject`專案的根目錄路徑。
+- `ExecStart`：指定啟動 Gunicorn 的命令。
+  - `/path/to/gunicorn`：替換為 Gunicorn 可執行文件的路徑。
+  - `myproject.wsgi:application`：假設你的專案使用了 WSGI 規範，並且在`myproject/wsgi.py`文件中有一個名為`application`的可調用對象。
+  - `-c /path/to/gunicorn.conf.py`：如果你有一個 Gunicorn 的設定文件，請提供其路徑。
+
+3. 重新加載 systemd
+   ```shell
+   sudo systemctl daemon-reload
+   ```
+4. 啟動 Gunicorn 服務
+   ```shell
+   sudo systemctl start gunicorn
+   ```
+5. 設置開機自啟動
+   ```shell
+   sudo systemctl enable gunicorn
+   ```
+6. 查看服務狀態
+   ```shell
+   sudo systemctl status gunicorn
+   ```
+7. 停止/重起
+   ```shell
+   sudo systemctl stop gunicorn
+   sudo systemctl restart gunicorn
+   ```
