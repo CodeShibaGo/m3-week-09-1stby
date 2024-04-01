@@ -130,3 +130,20 @@ https://www.cnblogs.com/zongfa/p/12614459.html#:~:text=flask%E4%B8%ADgunicorn%E7
    sudo systemctl stop gunicorn
    sudo systemctl restart gunicorn
    ```
+
+---
+
+## 說明 http 與 https 的差異??
+
+- HTTP 全名是 超文本傳輸協定（HyperText Transfer Protocol），內容只規範了客戶端請求與伺服器回應的標準，實際上是藉由  TCP 作為資料的傳輸方式。
+- HTTPS 全名   超文本傳輸安全協定(Hypertext Transfer Protocol Secure)，使用 SSL/TLS 加密協議,將傳輸的資料進行加密,提高了安全性,防止資料被攔截和竊聽。
+
+## 端口：
+
+- HTTP 預設使用端口 80。
+- HTTPS 預設使用端口 443。
+
+## 網址顯示:
+
+- HTTP 網址以"http://"開頭。
+- HTTPS 網址以"https://"開頭,並在瀏覽器地址欄顯示一個鎖型圖示,表示連接是安全的。
